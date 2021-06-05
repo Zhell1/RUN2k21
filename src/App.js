@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import { Button } from '@material-ui/core';
-import logo from './logo.svg';
-import Popup from 'reactjs-popup';
-import 'reactjs-popup/dist/index.css';
-import './App.css';
 import { makeStyles } from '@material-ui/core/styles';
-import {Presto, embed} from 'paypresto.js';
-
- 
+import {Presto, embed} from 'paypresto.js'; 
 import ResponsiveDialog from "./PayDialog"
+
+import './App.css';
+import logo from './logo.svg';
 
 const useStyles = makeStyles((theme) => ({
 
