@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script>
+      global = window;
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="https://unpkg.com/bsv"></script>
+    <script src="https://unpkg.com/txforge"></script>
+    <script src="https://unpkg.com/paypresto.js"></script>
+    
+    <script src="runsdk/bsv.browser.min.js"></script>
+    <script src="runsdk/run.browser.min.js"></script>
+  </head>
+  <script>
+    console.log("$ = ", $);
+    console.log("bsv = ", bsv);
+    console.log("TxForge = ", TxForge);
+    console.log("Run = ", Run);
+    console.log("Paypresto = ", Paypresto);
+  </script>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/javascript" src="./src/index.js"></script>
+    <script type="text/javascript" src="./src/paypresto.js"></script>
+  </body>
+</html>

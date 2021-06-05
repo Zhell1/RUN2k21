@@ -1,0 +1,27 @@
+const path = require('path');
+const CopyPlugin = require("copy-webpack-plugin")
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
+
+module.exports = {
+  entry: './src/index.js',
+  mode: "development",
+  output: {
+    filename: 'main.js',
+    path: path.resolve(__dirname, 'dist'),
+  },
+  devServer: {
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 3000,
+  },
+  plugins: [
+    new CopyPlugin({
+        patterns: [
+            { from: "./*.html" },
+            { from: "./*.css" },
+        ]
+    }),
+    new NodePolyfillPlugin()
+  ]
+};
+
