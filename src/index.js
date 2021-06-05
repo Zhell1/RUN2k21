@@ -7,6 +7,7 @@ window.clicked = function () {
   var button = document.getElementById("mybutton");
   button.innerHTML = "clicked";
 };
+//test
 
 rootApp.innerHTML = `
   <button id="mybutton" onclick="clicked()">
