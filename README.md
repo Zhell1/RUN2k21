@@ -12,7 +12,7 @@ This repo is mostly a React front-end that displays how a website can use jigs t
 
 You can find a conceptual example of using those oracles for a Super Rare Egg NFT that can only be hatched on full moons in `/src/MysteriousEgg.js`
 
-A nodejs functional exemple of creating an oracleRequest, funding it, and getting the value set by the oracle can be found in `/src/test.js` (this one needs fixing since oracle was moved to usd-price, see comment in the file)
+A nodejs functional exemple of creating an oracleRequest, funding it, and getting the value set by the oracle can be found in `/src/test.js` 
 
 The backend for those oracles was also created for the RUN2K21 Hackaton and is running on a private server.
 
