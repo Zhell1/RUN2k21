@@ -1,106 +1,54 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
-import { Button, Container } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import {Presto, embed} from 'paypresto.js'; 
-import ResponsiveDialog from "./PayDialog";
 import Grid from '@material-ui/core/Grid';
-import logo from './logo.svg';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import Alert from '@material-ui/lab/Alert';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import { SnackbarProvider, useSnackbar } from 'notistack';
+import Run from "run-sdk";
 
-const useStyles = makeStyles((theme) => ({
-}));
+import { get_bsvusd } from "./getBsvPrice.js"
+import { OracleCard } from "./oracleCard.js"
+import { pursePayPresto } from "./pursePayPresto.js"
 
-const useCardStyles = makeStyles({
-  root: {
-    maxWidth: 300,
-    textAlign: 'left',
-  },
-});
+const RandomValueRequest_origin = "c968fc2674921d07c39051fa735e6a5ebbb69cc0b8b90232e76ae87e3d72101a_o2"
+const BSVUSDRequest_origin 			= "c1f16893516de7824af5984aa343ce4df42d38b238b8b1dced2b1d3abb44361c_o2"
+const TimestampRequest_origin	 	= "fcbf7ad48704593f46c1d357d0d6913f442fc244c58c2ef0fef78cb15a5dac7e_o2"
 
-function OracleCard(props) {
-  const classes = useCardStyles();
-  const [isOpenDialog, set_isOpenDialog] = useState(false)
-  const handleClosedDialog = () => {
-    set_isOpenDialog(false)
-  }
-  return(
-    <Card className={classes.root}>
-      <ResponsiveDialog open={isOpenDialog} handleClose={handleClosedDialog}>
-          <div className="payprestoWidget" id="payprestoWidget"></div>
-          <div id="payprestowidget"></div>
-        </ResponsiveDialog>
-      <CardActionArea>
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {props.title}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {props.description}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            Price : {props.price}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-      <CardActions>
-        <Button variant="contained" color="primary"
-          onClick={()=>{ set_isOpenDialog(true); pay() }}>
-          Call
-        </Button>
-      </CardActions>
-    </Card>
-  )
-}
+const bsv = window.bsv1
 
+const pursePresto = new pursePayPresto()
 
-function pay(){
-  console.log(Presto)
-  const payment = Presto.create({
-    key: 'Kx2p4o7FYJYjEwufdYJLXjPtu2vaSpQ8mB7mjMJnaHnPSrGQ1nQk',
-    description: 'My test payment',
-    outputs: [
-      { to: '1NSnepC6vitDCVozFJLw1BK2xTDY34KJbX', satoshis: 546 }, // TODO replace with oracle address
-      { data: [Buffer.from("Hello world!")] }
-    ]
-  })
-  console.log(payment)
-  payment
-    .mount(embed('#payprestowidget', { style: ['rounded', 'border-thick'] }))
-    .on('funded', payment => payment.pushTx())
-    .on('success', txid => console.log('TX sent', txid))
-}
+export const run = new Run({
+  purse: pursePresto,
+  app: "RUN2K2021_Hackaton_RunCraft",
+  trust: "*"
+})
 
 function App() {
-  const classes = useStyles();
   return (
     <div className="App">
       <header className="App-header" style={{display: 'block'}}>
-      <AppBar position="static" style={{marginBottom: "2em"}}>
-        <Toolbar>
-          <Typography variant="h5" className={classes.title}>
-            Oracles
-          </Typography>
-          <Button variant="contained" color="primary" style={{position: "absolute", right: "10px", top: "15px"}}>
-            Add My Oracle
-          </Button>
-        </Toolbar>
-      </AppBar>
-        
+        <AppBar position="static" style={{marginBottom: "2em"}}>
+          <Toolbar>
+            <Typography variant="h5">
+              Oracles
+            </Typography>
+          </Toolbar>
+        </AppBar>
 
-     
         <Grid container direction="row" justify="space-evenly" alignItems="flex-start">
-          <OracleCard title="Oracle1" description="This Oracle gives you the BSV price" price="0.1 Cents"/>
-          <OracleCard title="Oracle2" description="This Oracle gives you too the BSV price!" price="0.1 Cents"/>
-          <OracleCard title="Oracle3" description="Guess what? This Oracle gives you too the BSV price!" price="0.1 Cents"/>
+          <OracleCard title="Oracle1" description="This Oracle gives you the BSV price" widgetname="oracle1" oracleOrigin={RandomValueRequest_origin}/>
+          <OracleCard title="Oracle2" description="This Oracle gives you too the BSV price!" price={0.01} widgetname="oracle2" oracleOrigin={BSVUSDRequest_origin}/>
+          <OracleCard title="Oracle3" description="Guess what? This Oracle gives you too the BSV price!" price={0.01} widgetname="oracle3" oracleOrigin={TimestampRequest_origin}/>
         </Grid>
       </header>
     </div>
