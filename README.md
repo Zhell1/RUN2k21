@@ -12,7 +12,7 @@ This repo is mostly a React front-end that displays how a website can use jigs t
 
 You can find a conceptual example of using those oracles for a Super Rare Egg NFT that can only be hatched on full moons in `/src/MysteriousEgg.js`
 
-A nodejs functional exemple of creating an oracleRequest, funding it, and getting the value set by the oracle can be found in `/src/test.js`
+A nodejs functional exemple of creating an oracleRequest, funding it, and getting the value set by the oracle can be found in `/src/test.js` (this one needs fixing since oracle was moved to usd-price, see comment in the file)
 
 The backend for those oracles was also created for the RUN2K21 Hackaton and is running on a private server.
 
@@ -82,6 +82,30 @@ The other oracles work the same way, which has the benefit that it allows the us
 When the oracle price is updated, if you create an oracleRequest at the same time, there is usually a syncing risk. This would usually result in an un-answered request. To remove that risk, we introduce a window of time after any price update, where the oracle will tolerate the user paying the previous price. Both prices are always saved in the oracle contract for provability. The time window is not disclosed to limit abuses and may change at any time, as we only care about honest users.
 
 **So always make sure to sync() the oracle to use the latest price and it will work flawlessly - combined with our tolerance window!**
+
+_________________
+
+# Basic Example
+
+```js
+var RandomValueRequest = await load_contract(RandomValueLocation)
+// sync for safety
+await RandomValueRequest.sync()
+
+// sync oracle for latest .priceUSD
+let my_oracle = RandomValueRequest.oracle
+await my_oracle.sync()
+
+let bsvusd = await get_bsvusd()
+let topay_satoshis = parseInt(my_oracle.priceUSD / bsvusd * 1e8, 10)
+
+let myRandomValue = new RandomValueRequest(topay_satoshis)
+await run.sync()
+setTimeout(async ()=>{
+    await myRandomValue.sync()
+    console.log("oracle answered : ",myRandomValue.value)
+}, 8000)
+```
 
 _________________
 
