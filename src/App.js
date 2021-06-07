@@ -34,9 +34,9 @@ function App() {
         </AppBar>
 
         <Grid container direction="row" justify="space-evenly" alignItems="flex-start">
-          <OracleCard title="Oracle1" description="This Oracle gives you the BSV price" widgetname="oracle1" oracleOrigin={RandomValueRequest_origin}/>
-          <OracleCard title="Oracle2" description="This Oracle gives you too the BSV price!" price={0.01} widgetname="oracle2" oracleOrigin={BSVUSDRequest_origin}/>
-          <OracleCard title="Oracle3" description="Guess what? This Oracle gives you too the BSV price!" price={0.01} widgetname="oracle3" oracleOrigin={TimestampRequest_origin}/>
+          <OracleCard title="Random Value Oracle" description="This Oracle gives you a random value as a float between 0 and 1, same as Math.random() but for jigs." widgetname="oracle1" oracleOrigin={RandomValueRequest_origin}/>
+          <OracleCard title="BSV/USD Price Oracle" description="This Oracle gives you the current BSV price in USD" price={0.01} widgetname="oracle2" oracleOrigin={BSVUSDRequest_origin}/>
+          <OracleCard title="Timestamp Oracle" description="This Oracle gives you the current timestamp in ms, same as Date.now() but for jigs." price={0.01} widgetname="oracle3" oracleOrigin={TimestampRequest_origin}/>
         </Grid>
       </header>
     </div>
