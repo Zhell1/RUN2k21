@@ -11,14 +11,13 @@ import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import Alert from '@material-ui/lab/Alert';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { SnackbarProvider } from 'notistack';
-import Run from "run-sdk";
+//import Run from "run-sdk";
 
 import { get_bsvusd } from "./getBsvPrice.js"
 import { waitAndCheckValue, TIMEOUT_MS } from "./checkOracleValue.js"
 import { CopiedMessage } from "./copiedMessage.js"
 
-
-import { run } from "./App.js"
+const Run = window.Run
 
 const useCardStyles = makeStyles({
     root: {
@@ -42,7 +41,7 @@ const exampleOfUse =
 }
 MysteriousEgg.deps = { RandomValue, power }
 
-// TimestampRequest idea => make an egg that can only be hatched on full moon
+// Timestamp Oracle idea => make an egg that can only be hatched on full moon
 `
 
 function createLink(requestId){
@@ -50,6 +49,9 @@ function createLink(requestId){
   }
 
 async function load_contract(origin){
+  
+    var run = window.run
+    console.log("run = ",run)
     // load oracleRequests contracts
     let contract = await run.load(origin)
     await contract.sync()
@@ -92,7 +94,9 @@ export function OracleCard(props) {
     }
   
     if(!called_loadPrice){
-      set_called_loadPrice(true)
+      setTimeout(()=>{
+        set_called_loadPrice(true)
+      },5000)
       loadPrice()
       // TODO there is probably a cleaner way to do this
     }
@@ -115,7 +119,8 @@ export function OracleCard(props) {
       
       set_isOpenPayPresto(true)
   
-      run.purse.set_prestoWidget(props.widgetname, successCallback)
+      var run=window.run
+      run.purse.set_prestoWidget(props.widgetname, successCallback, run)
   
       set_step("clicked")
     }
@@ -126,6 +131,7 @@ export function OracleCard(props) {
   
     async function callback_successOracle(value, txid)
     {
+      var run=window.run
       var myRequest = await run.load(txid+'_o1') // TODO make that better
       await myRequest.sync()
       set_oracleValue(myRequest.value)
@@ -146,6 +152,8 @@ export function OracleCard(props) {
   
   
     async function loadPayPresto(){
+
+      var run=window.run
   
       // RUN tx oracle request
   
@@ -228,10 +236,10 @@ export function OracleCard(props) {
             <a href={createLink(props.oracleOrigin)} target="_blank" rel="noopener noreferrer">
               {props.oracleOrigin}
             </a>
-            <input type="text" value={props.oracleOrigin} id ="textToCopy" style={{opacity:"0"}}></input>
+            <input type="text" value={props.oracleOrigin} readOnly id={"textToCopy_"+props.oracleOrigin} style={{opacity:"0"}}></input>
             <br/>
             <SnackbarProvider maxSnack={3}>
-              <CopiedMessage/>
+              <CopiedMessage idtocopy={"textToCopy_"+props.oracleOrigin} copiedmess={props.oracleOrigin}/>
             </SnackbarProvider>
             <br/><br/>
             
@@ -244,7 +252,7 @@ export function OracleCard(props) {
               <a href="https://github.com/Zhell1/RUN2k21" style={{textDecoration: "none"}} target="_blank" rel="noopener noreferrer"><Button variant="contained">See more on GitHub</Button></a>
             </Container>
             <ResponsiveDialog open={isOpenPayPresto} handleClose={handleClosedPayPresto}>
-              <div id={props.widgetname} class={props.widgetname}></div>
+              <div id={props.widgetname} className={props.widgetname}></div>
             </ResponsiveDialog>
   
           </ResponsiveDialog>

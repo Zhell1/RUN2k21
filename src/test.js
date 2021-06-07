@@ -1,4 +1,6 @@
-const Run = require("run-sdk") 
+//const Run = require("run-sdk") 
+const Run = window.Run
+
 const purseprivkey = "<my-purse-private-key>"
 const run = new Run({trust:"*", purse: purseprivkey})
 

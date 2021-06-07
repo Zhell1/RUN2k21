@@ -1,15 +1,20 @@
-import {Presto, embed} from 'paypresto.js';
+//import {Presto, embed} from 'paypresto.js';
 
-import {run} from "./App.js"
+//import { run } from "./App.js"
 
-const bsv = window.bsv1
+const bsv = window.bsv
+const bsvjs  = window.bsvjs
+const Run = window.Run
+const Presto = window.Paypresto.Presto
+const embed  = window.Paypresto.embed
 
 export class pursePayPresto
 {
-    set_prestoWidget(widgetname, successCallback)
+    set_prestoWidget(widgetname, successCallback, run)
     {
       this.widgetname=widgetname
       this.successCallback=successCallback
+      this.run=run
     }
     async pay(rawtx, parents) {
         // process the raw transaction, outputs and UTXOs
@@ -46,6 +51,7 @@ export class pursePayPresto
         utxos.forEach(utxo => payment.forge.addInput(utxo))
         payment.forge.inputs.push(paid)
         payment.forge.build()
+        const run = this.run
         for(let i=0; i<payment.forge.inputs.length-1; i++){
           payment.signTxIn(i, {keyPair: new bsv.KeyPair().fromPrivKey(new bsv.PrivKey().fromString(run.owner.privkey))})
         }

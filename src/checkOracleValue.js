@@ -1,4 +1,5 @@
-import { run } from "./App.js"
+//import { run } from "./App.js"
+
 
 export const TIMEOUT_MS = 20*1000 // for value set() by oracle
 
@@ -9,24 +10,25 @@ export async function waitAndCheckValue(txid, callback_timeout, callback_success
       console.log("set timestamp at ",init_timestamp)
     }
   
-      setTimeout(async ()=>{
-        // run.sync and check .value != undefined
-      var myRequest = await run.load(txid+'_o1') // TODO make that better
-      await myRequest.sync()
-      var value = myRequest.value
+    setTimeout(async ()=>{
+          var run = window.run
+          // sync and check if .value != undefined
+          var myRequest = await run.load(txid+'_o1') // TODO make that better
+          await myRequest.sync()
+          var value = myRequest.value
+          
+          if(value){
+            console.log("success with value: myRequest=",myRequest," \n\n value = ",value)
+            
+            callback_successOracle(value, txid)
       
-      if(value){
-        console.log("success with value: myRequest=",myRequest," \n\n value = ",value)
-        
-        callback_successOracle(value, txid)
-  
-      } else {
-          if(Date.now()-init_timestamp > timeout_ms) {
-          console.log("timedout at ",Date.now())
-          callback_timeout()
-        } else {
-                  waitAndCheckValue(txid, callback_timeout, callback_successOracle, retry_every, timeout_ms, init_timestamp)
-        }
-      }
-      }, retry_every)
+          } else {
+            if(Date.now()-init_timestamp > timeout_ms) {
+                console.log("timedout at ",Date.now())
+                callback_timeout()
+            } else {
+                waitAndCheckValue(txid, callback_timeout, callback_successOracle, retry_every, timeout_ms, init_timestamp)
+            }
+          }
+    }, retry_every)
   }

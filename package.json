@@ -14,6 +14,7 @@
     "braces": "^3.0.2",
     "browserslist": "^4.16.6",
     "bsv": "^2.0.10",
+    "customize-cra": "^1.0.0",
     "eslint": "^7.28.0",
     "eslint-config-react-app": "^6.0.0",
     "gh-pages": "^3.2.0",
@@ -27,13 +28,12 @@
     "react-scripts": "^4.0.3",
     "react-syntax-highlighter": "^15.4.3",
     "run-sdk": "^0.6.24",
-    "txforge": "^0.2.3",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-app-rewired start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "deploy": "gh-pages -d build"
   },
@@ -54,5 +54,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "react-app-rewired": "^2.1.8"
   }
 }
