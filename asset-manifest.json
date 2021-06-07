@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/RUN2k21/static/css/main.1635e87c.chunk.css",
-    "main.js": "/RUN2k21/static/js/main.aa699721.chunk.js",
-    "main.js.map": "/RUN2k21/static/js/main.aa699721.chunk.js.map",
+    "main.js": "/RUN2k21/static/js/main.12334a61.chunk.js",
+    "main.js.map": "/RUN2k21/static/js/main.12334a61.chunk.js.map",
     "runtime-main.js": "/RUN2k21/static/js/runtime-main.b6187a6c.js",
     "runtime-main.js.map": "/RUN2k21/static/js/runtime-main.b6187a6c.js.map",
     "static/js/2.b6a7173f.chunk.js": "/RUN2k21/static/js/2.b6a7173f.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.b6187a6c.js",
     "static/js/2.b6a7173f.chunk.js",
     "static/css/main.1635e87c.chunk.css",
-    "static/js/main.aa699721.chunk.js"
+    "static/js/main.12334a61.chunk.js"
   ]
 }
