@@ -1,6 +1,6 @@
-import {run} from "./App.js"
+import { run } from "./App.js"
 
-export const TIMEOUT_MS = 10*1000 // for value set() by oracle
+export const TIMEOUT_MS = 20*1000 // for value set() by oracle
 
 export async function waitAndCheckValue(txid, callback_timeout, callback_successOracle, retry_every=200, timeout_ms=TIMEOUT_MS, init_timestamp=null){
 
