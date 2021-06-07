@@ -1,29 +1,17 @@
 import React from 'react';
 import './App.css';
 import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardContent from '@material-ui/core/CardContent';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
-import Alert from '@material-ui/lab/Alert';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import { SnackbarProvider, useSnackbar } from 'notistack';
 import Run from "run-sdk";
 
-import { get_bsvusd } from "./getBsvPrice.js"
 import { OracleCard } from "./oracleCard.js"
 import { pursePayPresto } from "./pursePayPresto.js"
 
 const RandomValueRequest_origin = "c968fc2674921d07c39051fa735e6a5ebbb69cc0b8b90232e76ae87e3d72101a_o2"
 const BSVUSDRequest_origin 			= "c1f16893516de7824af5984aa343ce4df42d38b238b8b1dced2b1d3abb44361c_o2"
 const TimestampRequest_origin	 	= "fcbf7ad48704593f46c1d357d0d6913f442fc244c58c2ef0fef78cb15a5dac7e_o2"
-
-const bsv = window.bsv1
 
 const pursePresto = new pursePayPresto()
 

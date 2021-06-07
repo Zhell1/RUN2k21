@@ -10,10 +10,9 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import { a11yDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import Alert from '@material-ui/lab/Alert';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { SnackbarProvider, useSnackbar } from 'notistack';
+import { SnackbarProvider } from 'notistack';
 import Run from "run-sdk";
 
-import { pursePayPresto } from "./pursePayPresto.js"
 import { get_bsvusd } from "./getBsvPrice.js"
 import { waitAndCheckValue, TIMEOUT_MS } from "./checkOracleValue.js"
 import { CopiedMessage } from "./copiedMessage.js"
