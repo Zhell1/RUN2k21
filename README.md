@@ -1,91 +1,149 @@
-# front-end for RUN2k21 entry
+# Functional USD priced RUN Oracles [RUN2k21 Hackaton]
+
+> **Allowing anyone to inject random values, the current time, or the BSVUSD price in any RUN Jig - and make jigs react differently based on them!**
+
+___________________
+
+<img src="./image.jpg">
+
+# What's the deal
+
+This repo is mostly a React front-end that displays how a website can use jigs to get values from the functional RUN oracles we deployed. We also provide a nodejs example. This repo is deployed on github-pages at **[zhell1.github.io/RUN2k21](https://zhell1.github.io/RUN2k21/)**  and at  **[run2k21.runcraft.io](http://run2k21.runcraft.io/ )**
+
+You can find a conceptual example of using those oracles for a Super Rare Egg NFT that can only be hatched on full moons in `/src/MysteriousEgg.js`
+
+A nodejs functional exemple of creating an oracleRequest, funding it, and getting the value set by the oracle can be found in `/src/test.js`
+
+The backend for those oracles was also created for the RUN2K21 Hackaton and is running on a private server.
+
+____________
+
+# Testing
+
+Just go to **[zhell1.github.io/RUN2k21](https://zhell1.github.io/RUN2k21/)**  or  **[run2k21.runcraft.io](http://run2k21.runcraft.io/ )**
+
+Click on any oracle, then click the `TEST ORACLE` button, and fund the transaction with any BSV wallet.
+The oracle should answer you directly in your jigs !
 
 
-this repo is deployed at http://run2k21.runcraft.io/
+____________
 
-motivation: oracles need to establish trust
-problem: this cannot be done with satoshi-priced oracles as crypto prices are very volatile, as bsv proved in past months
-        if price does x10, your oracle price does too.
-        if price does /10, your oracle might be losing money
-idea: we need usd-priced oracles
-hardship: we don't have a bsvusd price onchain as a run contract
-          and if we did the contract would get updated a lot of quickly become slow to sync
-          (at least until all apps have trusted cache servers, and we are still far from it today)
+# Our Adventure
 
-goal: we want an oracle that has those properties:
-    - is priced in usd
-    - can reliably be called despite price volatility
-    - can update its usd price both downward & upward
-    - doesn't have sync issues even if updating its price upward
-    - can be profitable (doesn't waste money)
+### Motivation
 
-epic fails:
-    - experimented with 3steps oracle (init, then fund, then getvalue), too complicated for user and doesn't really solves the problem
-    - first proof of concept required to update all oracles' prices every single day at least, hard to remain profitable
+Oracles are based on trust, so they need to be able to establish trust over a long period of time
 
-BSVUSD doesn't have an onchain satoshi price (but a usd one)
+### Problem
 
-the user must retrieve the usd price, calculate the nb of satoshis, and put it in the init
-we accept a 20% margin below our own computed value for synchronization help
-but to be sure we recommand you send at the exact computed price or to add 1-2% on top
-in the future we may provide an API to get the exact value in satoshis but we want it to work without the need for one
+Establishing trust can hardly be done with satoshi-priced oracles as crypto prices are very volatile. The BSV/USD price proved it well in past few months. Basically the issue is:
+- **if price does x10, your oracle price does too. It is now too expensive to use.**
+- **if price does /10, your oracle might be losing money now.**
 
-all others work this same way, which is nice because it allows the user to check the price of the oracle in usd
-if we happen to update it, he can set a max price to pay in usd and if the oracle service increases price too much he is safe
+### Idea
 
-Also to remove the risk of an update to the price breaking your oracleRequest, if both happened at the same time,
-we tolerate a window of time after any price update, where users can pay using the previous price.
-So always make sure to sync() and use the latest price so it can work combined with our security window.
+We need a solution for usd-priced oracles on RUN.
 
+### Hardships
 
-Architecture
+We don't have a bsv/usd price onchain as a run contract. Even if we did the contract would get updated a lot, quickly becoming extremely slow to sync, at least until all apps have trusted cache servers. But we are still far from it today.
 
-Oracle
+### Goals
 
-Each Oracle is itself an nft that can be transferred to another service
-the usd price can be changed too.
-it also allows you to update a message for users, and to deprecate it.
+We want an oracle that has those properties:
 
-OracleRequest
+- is priced in usd
+- can reliably be called despite price volatility
+- can update its usd price both downward & upward
+- has 0 sync issues for users even if updating its price, even upward
+- can be profitable - it must not waste money uselessly
 
-this class must be extended
-those are the instances that the users actually use
-they all have an Oracle linked to their constructor that gives the latest usdprice for calls
-	 * To use this usd-price OracleRequest:
-	 * 		1) Compute the amount of satoshis to pay on your side:
-	 * 			- based on the current bsv/usd price from APIs (we accept a -20% margin of error)
-	 * 			- based on the usd price in the .oracle.priceUSD
-	 * 			- pass that amount of satoshis in init() like: new RandomValue(1000)
-	 * 		2) You then wait for the oracle to set() the .randomValue.value with a retry loop
-	 * 			that periodically syncs your jig & tries to read the value
+### Epic fails
 
-Extends from OracleRequest
+- we experimented with 3-steps oracle: init to get the bsvusd price, then fund the actual oracle request, then get the value. This was too complicated for users and doesn't really solves the root problem.
+- our first proof of concept required to update all oracles' prices at least once every day. This would have made it hard for the oracles to stay profitable. It would also have made them very slow to load over time, at least without a trusted cache server.
 
-example:
-    export class RandomValueRequest extends OracleRequest_priceUSD {}
-    RandomValueRequest.description="get a random value as a float between 0 and 1, same as Math.random() but for jigs."
+## Solution
 
+Our BSVUSD oracle doesn't have an onchain satoshi price, but it has an onchain USD price.
 
-other ideas that might improve the system if they happen to work:
-    - accept the price paid based on any of the current or the last 24h average to reduce price volatility risk for users even more
-    - provide an npm package as an easy way to use the oracles with their satoshi prices
-    - provide an API to get the satoshi price of oracles (but we prefer onchain stuff as much as possible)
-    - provide an API with a /{txid} endpoint to get the status of our tx when it failed to get set() by oracle
-            ex "too low payment amount"
-    - find a way to let users submit a recent preev tx in init() as the proof of bsvusd price they want to use
-    - let users submit in init() any instance of one of our BSVUSDrequest onchain tx, the oracle will check its blockchain timestamp
-        if it's below 24h, we can accept this price as the bsvusd price the user uses to pay
-        con: more work for the user ? put it in a helper function in a lib ?
-    - accept relayx-USDC tokens as payment instead of satoshi -> would make everything easier for price calculation
+The user must retrieve the usd price by any way of his choice, then use it to compute the number of satoshis to pay. Then he puts it in the init() call creating the oracleRequest.
 
-# build
+**This solution can seem simple, but after experiencing with many alternatives we can say it has beauty in its simplicity. And with a few safety measures to deal with onchain syncing issues, we have been able to make it work flawlessly.**
 
-depending on your build you must specify "homepage" property in package.json:
+##### Safety measure 1: Price margin tolerance
+To allow for discrepencies in price retrieval, we allow for a 20% margin below our own computed price. You might try to use this to get a discount, but to make sure everything flows perfectly every time, we recommend users send their exact computed price. Sending lower amounts could result in un-answered oracleRequests.
+In the future we may provide an API to get the exact price in satoshis but we rather have as much as possible working directly on the blockchain.
 
-on local & on runcraft.io:
+##### Safety measure 2: Users control their own price limit
+The other oracles work the same way, which has the benefit that it allows the user to check the price of the oracle in usd. So even if the oracle's administrator updates the price, the user can check in his code a maximum limit price to pay in USD. If the oracle service increases its price too much, the user is safe that he will not go beyond his own limit. Combining this with a few oracles for the same value offers a very good compromise.
 
--  no homepage 
+##### Safety measure 2: Time window tolerance
+When the oracle price is updated, if you create an oracleRequest at the same time, there is usually a syncing risk. This would usually result in an un-answered request. To remove that risk, we introduce a window of time after any price update, where the oracle will tolerate the user paying the previous price. Both prices are always saved in the oracle contract for provability. The time window is not disclosed to limit abuses and may change at any time, as we only care about honest users.
 
-on github pages:
+**So always make sure to sync() the oracle to use the latest price and it will work flawlessly - combined with our tolerance window!**
 
--  "homepage": "https://zhell1.github.io/RUN2k21/",
+_________________
+
+# Architecture
+
+## Oracle
+
+Each Oracle is itself an NFT that can be transferred to another administrator.
+The usd price can be changed, it allows you to update a message for users, and to deprecate the oracle.
+
+## OracleRequest
+
+This class must be extended.
+This the parent class of the instances that the users actually create.
+They all have an Oracle linked to them that gives the latest usd price for calls of this oracle.
+To use this usd-priced OracleRequest you will:
+
+```text
+1) Compute the amount of satoshis to pay on your side:
+    - get the current bsv/usd price from an API
+    - get the usd price from oracleRequest.oracle.priceUSD
+    - pass that amount of satoshis in init() like: new RandomValue(parseInt(priceUSD / bsvusd * 1e8, 10))
+    
+2) You then wait for the oracle to set() the oracleRequest.value
+    for a faster answer,  use a retry loop that periodically syncs your jig & reads the value
+```
+
+## Extends from OracleRequest
+
+They are used to create the different OracleRequests classes that users instantiate. For example:
+
+```js
+export class RandomValueRequest extends OracleRequest_priceUSD {}
+RandomValueRequest.description="get a random value as a float between 0 and 1, same as Math.random() but for jigs."
+```
+
+_________________
+
+## Other ideas that might improve this project
+
+- **accept relayx-USDC tokens as payment aside from satoshis, that would make everything easier for price calculation**
+- provide an npm package as an easy way to use the oracles with their satoshi prices
+- provide an API to get the satoshi price of oracles
+- accept the price paid based on either the current or the last 24h average to reduce price volatility risk for users even more
+- provide an API with a /{txid} endpoint to get the status of our tx when it failed to get set() by oracle
+        ex "too low payment amount"
+- find a way to let users submit a recent onchain Preev tx in init() as a proof of bsvusd price they want to use
+- let users submit in init() a previous onchain tx of a BSVUSDrequest, the oracle will check that it is recent enough to be considered valid
+
+_________________
+
+# Building
+
+Based on your build target you might need to specify the "homepage" property in package.json:
+
+For example on local & on runcraft.io, you should use no homepage.
+For github pages you should add something like:
+`"homepage": "https://zhell1.github.io/RUN2k21/"`
+
+Then run
+
+```bash
+    npm run build
+    serve -s build
+```

@@ -6,12 +6,12 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 //import Run from "run-sdk"; // "Error: assert failed" in build
 import { OracleCard } from "./oracleCard.js"
-import { pursePayPresto } from "./pursePayPresto.js"
+import { MyPurse } from "./purse.js"
 
 const Run = window.Run
 var run
 
-const pursePresto = new pursePayPresto()
+const myPurse = new MyPurse()
 
 const RandomValueRequest_origin = "c968fc2674921d07c39051fa735e6a5ebbb69cc0b8b90232e76ae87e3d72101a_o2"
 const BSVUSDRequest_origin 			= "c1f16893516de7824af5984aa343ce4df42d38b238b8b1dced2b1d3abb44361c_o2"
@@ -23,7 +23,7 @@ function App() {
   if(!run)
     run = new Run({
         network: 'main',
-        purse: pursePresto,
+        purse: myPurse,
         trust:"*",
         app: "RUN2K2021_Hackaton_RunCraft",
     })

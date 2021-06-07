@@ -8,7 +8,7 @@ const Run = window.Run
 const Presto = window.Paypresto.Presto
 const embed  = window.Paypresto.embed
 
-export class pursePayPresto
+export class MyPurse
 {
     set_prestoWidget(widgetname, successCallback, run)
     {
