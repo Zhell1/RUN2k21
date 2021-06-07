@@ -6,6 +6,12 @@ const run = new Run({trust:"*", purse: purseprivkey})
 
 /*
  this file demonstrates loading and calling a RandomValue Request from the oracle and displaying it
+ 
+ note after Hackaton deadline: this doesn't work anymore after the oracle was moved to being usd-priced
+ the only 2 updates required to fix it are: 
+   myOracle.oracle.satoshisPerCall => myOracle.oracle.priceUSD
+ and
+   var myRequest = new RandomValueRequest() => var myRequest = new RandomValueRequest(satoshistopay)
 */
 
 async function loadOracle(origin)
