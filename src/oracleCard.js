@@ -71,6 +71,7 @@ export function OracleCard(props) {
     //const [satoshisPerCall, set_satoshisPerCall] = useState("loading")
     const [priceUSD, set_priceUSD] = useState(null)
     const [oracleValue, set_oracleValue] = useState()
+    const [myRequest_location, set_myRequest_location] = useState()
   
     async function loadPrice(){
   
@@ -85,18 +86,12 @@ export function OracleCard(props) {
       set_oracleRequestLocation(my_oracleRequest.location)
   
       let my_oracle = my_oracleRequest.oracle
-      console.log("my_oracle 1 = ",my_oracle)
       await my_oracle.sync()
-      console.log("my_oracle 2 = ",my_oracle)
       set_priceUSD(my_oracle.priceUSD)
-      //let satoshis = my_oracle.satoshisPerCall
-      //set_satoshisPerCall(satoshis)
     }
   
     if(!called_loadPrice){
-      setTimeout(()=>{
-        set_called_loadPrice(true)
-      },5000)
+      set_called_loadPrice(true)
       loadPrice()
       // TODO there is probably a cleaner way to do this
     }
@@ -120,7 +115,7 @@ export function OracleCard(props) {
       set_isOpenPayPresto(true)
   
       var run=window.run
-      run.purse.set_prestoWidget(props.widgetname, successCallback, run)
+      run.purse.set_prestoWidget(props.widgetname, callback_successPayment, run)
   
       set_step("clicked")
     }
@@ -129,22 +124,26 @@ export function OracleCard(props) {
       set_step("timedout")
     }
   
-    async function callback_successOracle(value, txid)
+    async function callback_successOracle(value, updated_location)
     {
       var run=window.run
-      var myRequest = await run.load(txid+'_o1') // TODO make that better
-      await myRequest.sync()
+
+      console.log("updated_location   = ",updated_location)
+
+      var myRequest = await run.load(updated_location) // no need to sync, already latest as it was destroyed by the oracle
+      set_myRequest_location(myRequest.location)
+
       set_oracleValue(myRequest.value)
-      var value2 = myRequest.value
+      
+      console.log("callback_successOracle(): jig value=",value," & callback value=",myRequest.value)
+
       set_step("response")
-      console.log("callback_successOracle(): value=",value," & value2=",value2)
     }
   
-    function successCallback(txid){ // success payment
+    async function callback_successPayment(txid){ // success payment
       console.log("successCallback!! txid=",txid)
       set_step("paid")
       set_isOpenPayPresto(false)
-      
       waitAndCheckValue(txid, callback_timeout, callback_successOracle)
     }
   
@@ -162,16 +161,15 @@ export function OracleCard(props) {
   
       // resync for safety
       await oracleRequest.sync()
-      await run.sync()
       //
       let my_oracle = oracleRequest.oracle
       console.log("my_oracle 1 = ",my_oracle)
       await my_oracle.sync()
       //
-      let topay_usd = my_oracle.priceUSD
       let bsvusd = await get_bsvusd()
-      let topay_satoshis = parseInt(topay_usd / bsvusd * 1e8,10)
+      let topay_satoshis = parseInt(my_oracle.priceUSD / bsvusd * 1e8, 10)
       //
+      await run.sync() // sync purse
       const tx = new Run.Transaction()
       var myRequest
       tx.update(()=>{
@@ -180,7 +178,6 @@ export function OracleCard(props) {
       const rawtx = await tx.export({pay: true})
   
       console.log("handleOpenPayPresto(): myRequest = ",myRequest)
-      //pay(props.widgetname, successCallback) // old
     }
   
     if(step=="clicked")
@@ -217,7 +214,13 @@ export function OracleCard(props) {
               </div>
             :step=="response"?
               <div>
-                <Alert severity="success">Oracle responded with value: {oracleValue}</Alert>
+                <Alert severity="success">
+                  Oracle responded with value: {oracleValue}
+                  <br/><br/>
+                  <a href={"https://run.network/explorer/?query="+myRequest_location+"&network=main"} target="_blank">
+                    Click here to see your onchain updated jig
+                  </a>
+                </Alert>
               </div>
             :step=="timedout"?
               <div>
@@ -231,7 +234,7 @@ export function OracleCard(props) {
             }
   
             <br/><br/>
-            Origin: 
+            Origin to load:
             <br/>
             <a href={createLink(props.oracleOrigin)} target="_blank" rel="noopener noreferrer">
               {props.oracleOrigin}

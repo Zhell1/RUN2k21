@@ -20,7 +20,7 @@ export async function waitAndCheckValue(txid, callback_timeout, callback_success
           if(value){
             console.log("success with value: myRequest=",myRequest," \n\n value = ",value)
             
-            callback_successOracle(value, txid)
+            callback_successOracle(value, myRequest.location)
       
           } else {
             if(Date.now()-init_timestamp > timeout_ms) {
