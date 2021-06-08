@@ -8,7 +8,7 @@ ___________________
 
 # What's the deal
 
-This repo is mostly a React front-end that displays how a website can use jigs to get values from the functional RUN oracles we deployed. We also provide a nodejs example. This repo is deployed on github-pages at **[zhell1.github.io/RUN2k21](https://zhell1.github.io/RUN2k21/)**  and at  **[run2k21.runcraft.io](http://run2k21.runcraft.io/ )**
+This repo is mostly a React front-end that displays how a website can use jigs to get values from the functional RUN oracles we deployed. We also provide a nodejs example. This repo is deployed on github-pages at **[zhell1.github.io/RUN2k21](https://zhell1.github.io/RUN2k21/)** 
 
 You can find a conceptual example of using those oracles for a Super Rare Egg NFT that can only be hatched on full moons in `/src/MysteriousEgg.js`
 
@@ -20,7 +20,7 @@ ____________
 
 # Testing
 
-Just go to **[zhell1.github.io/RUN2k21](https://zhell1.github.io/RUN2k21/)**  or  **[run2k21.runcraft.io](http://run2k21.runcraft.io/ )**
+Just go to **[zhell1.github.io/RUN2k21](https://zhell1.github.io/RUN2k21/)** 
 
 Click on any oracle, then click the `TEST ORACLE` button, and fund the transaction with any BSV wallet.
 The oracle should answer you directly in your jigs !
