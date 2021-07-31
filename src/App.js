@@ -45,7 +45,7 @@ function App() {
         <AppBar position="static" style={{marginBottom: "2em"}}>
           <Toolbar>
             <Typography variant="h5">
-              Oracles_v1
+              Oracles_v2
             </Typography>
           </Toolbar>
         </AppBar>
