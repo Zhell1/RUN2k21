@@ -171,3 +171,10 @@ Then run
     npm run build
     serve -s build
 ```
+
+# deploying to github pages
+
+- make sure "homepage" is defined as explained in `# Building`
+- run `npm run build`
+- push to github
+- run the script `github-pages-deploy.sh`
