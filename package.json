@@ -1,6 +1,7 @@
 {
   "name": "mon-app",
   "version": "0.1.0",
+  "homepage": "https://zhell1.github.io/RUN2k21/",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.4",

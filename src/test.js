@@ -22,8 +22,8 @@ async function loadOracle(origin)
     console.log("syncing oracle contract...")
     let myOracle= await run.load(origin)
     await myOracle.sync()
-    await myOracle.oracle.sync()
-    console.log("price per call: $",myOracle.oracle.priceUSD)
+    await myOracle.sync()
+    console.log("price per call: $",myOracle.get_price_USD())
     return myOracle
 }
 
@@ -33,7 +33,7 @@ async function main()
 
     try {
         console.log("asking oracle onchain...")
-        var satoshisToPay = parseInt(RandomValueRequest.oracle.priceUSD / await get_bsvusd() * 1e8, 10)
+        var satoshisToPay = parseInt(RandomValueRequest.get_price_USD() / await get_bsvusd() * 1e8, 10)
         console.log("satoshisToPay=",satoshisToPay)
         var myRequest = new RandomValueRequest(satoshisToPay)
         await run.sync()

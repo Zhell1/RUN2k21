@@ -80,14 +80,13 @@ export function OracleCard(props) {
       let my_oracleRequest = await load_contract(props.oracleOrigin) // load & sync
   
       console.log("my_oracleRequest = ",my_oracleRequest)
-      console.log("my_oracleRequest.oracle = ",my_oracleRequest.oracle)
+      console.log("my_oracleRequest = ",my_oracleRequest)
   
       
       set_oracleRequestLocation(my_oracleRequest.location)
   
-      let my_oracle = my_oracleRequest.oracle
-      await my_oracle.sync()
-      set_priceUSD(my_oracle.priceUSD)
+      await my_oracleRequest.sync()
+      set_priceUSD(my_oracleRequest.get_price_USD())
     }
   
     if(!called_loadPrice){
@@ -162,12 +161,12 @@ export function OracleCard(props) {
       // resync for safety
       await oracleRequest.sync()
       //
-      let my_oracle = oracleRequest.oracle
+      let my_oracle = oracleRequest
       console.log("my_oracle 1 = ",my_oracle)
       await my_oracle.sync()
       //
       let bsvusd = await get_bsvusd()
-      let topay_satoshis = parseInt(my_oracle.priceUSD / bsvusd * 1e8, 10)
+      let topay_satoshis = parseInt(my_oracle.get_price_USD() / bsvusd * 1e8, 10)
       //
       await run.sync() // sync purse
       const tx = new Run.Transaction()

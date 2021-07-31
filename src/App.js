@@ -26,7 +26,7 @@ function App() {
         network: 'main',
         purse: myPurse,
         trust:"*",
-        app: "runcraft.io",  # previously: "RUN2K2021_Hackaton_RunCraft"
+        app: "runcraft.io",  // previously: "RUN2K2021_Hackaton_RunCraft"
     })
   run.activate()
   window.run = run // make accessible in console
@@ -54,7 +54,7 @@ function App() {
           <OracleCard title="Random Value Oracle" description="This Oracle gives you a random value as a float between 0 and 1, same as Math.random() but for jigs." widgetname="oracle1" oracleOrigin={Oracle_RandomValue_origin}/>
           <OracleCard title="BSV/USD Price Oracle" description="This Oracle gives you the current BSV price in USD" price={0.01} widgetname="oracle2" oracleOrigin={Oracle_BSVUSD_origin}/>
           <OracleCard title="Timestamp Oracle" description="This Oracle gives you the current timestamp in ms, same as Date.now() but for jigs." price={0.01} widgetname="oracle3" oracleOrigin={Oracle_Timestamp_origin}/>    
-          <OracleCard title="BSV/EUR Oracle" description="This Oracle gives you you the current BSV price in USD" price={0.01} widgetname="oracle4" oracleOrigin={Oracle_BSVEUR_origin}/>   
+          <OracleCard title="BSV/EUR Oracle" description="This Oracle gives you you the current BSV price in EUR" price={0.01} widgetname="oracle4" oracleOrigin={Oracle_BSVEUR_origin}/>   
         </Grid>
       </header>
     </div>

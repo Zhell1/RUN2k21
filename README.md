@@ -92,12 +92,12 @@ var RandomValueRequest = await load_contract(RandomValueLocation)
 // sync for safety
 await RandomValueRequest.sync()
 
-// sync oracle for latest .priceUSD
-let my_oracle = RandomValueRequest.oracle
+// sync oracle for latest .get_price_USD()
+let my_oracle = RandomValueRequest
 await my_oracle.sync()
 
 let bsvusd = await get_bsvusd()
-let topay_satoshis = parseInt(my_oracle.priceUSD / bsvusd * 1e8, 10)
+let topay_satoshis = parseInt(my_oracle.get_price_USD() / bsvusd * 1e8, 10)
 
 let myRandomValue = new RandomValueRequest(topay_satoshis)
 await run.sync()
@@ -126,7 +126,7 @@ To use this usd-priced OracleRequest you will:
 ```text
 1) Compute the amount of satoshis to pay on your side:
     - get the current bsv/usd price from an API
-    - get the usd price from oracleRequest.oracle.priceUSD
+    - get the usd price from oracleRequest.get_price_USD()
     - pass that amount of satoshis in init() like: new RandomValue(parseInt(priceUSD / bsvusd * 1e8, 10))
     
 2) You then wait for the oracle to set() the oracleRequest.value
