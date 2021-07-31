@@ -13,9 +13,10 @@ var run
 
 const myPurse = new MyPurse()
 
-const RandomValueRequest_origin = "c968fc2674921d07c39051fa735e6a5ebbb69cc0b8b90232e76ae87e3d72101a_o2"
-const BSVUSDRequest_origin 			= "c1f16893516de7824af5984aa343ce4df42d38b238b8b1dced2b1d3abb44361c_o2"
-const TimestampRequest_origin	 	= "fcbf7ad48704593f46c1d357d0d6913f442fc244c58c2ef0fef78cb15a5dac7e_o2"
+const Oracle_RandomValue_origin = "8bf48350464e32cd9eea006e6a7a9cea40358a457b2dd432da924d592b919ee7_o2"
+const Oracle_Timestamp_origin 			= "8eb566a8337b3fc3deb28f1a8829911fce8e2353c27407985b9630ab46f6c00c_o2"
+const Oracle_Timestamp_origin	 	= "ec2425d007e792c9fc543cac51623f530338c347ca6f1dc53ab870a3996feac3_o2"
+const Oracle_BSVEUR_origin           = "8e9965b9653807a4a3bf3cfa2f20e247fdb14ded4de41e5209fadbf9d659ecca_o2"
 
 
 function App() {
@@ -30,7 +31,7 @@ function App() {
   run.activate()
   window.run = run // make accessible in console
   async function loadjig(){
-    var jig = await run.load(RandomValueRequest_origin)
+    var jig = await run.load(Oracle_RandomValue_origin)
     console.log("jig = ",jig)
     await jig.sync()
     console.log("jig = ",jig)
@@ -44,15 +45,16 @@ function App() {
         <AppBar position="static" style={{marginBottom: "2em"}}>
           <Toolbar>
             <Typography variant="h5">
-              Oracles
+              Oracles_v1
             </Typography>
           </Toolbar>
         </AppBar>
 
         <Grid container direction="row" justify="space-evenly" alignItems="flex-start">
-          <OracleCard title="Random Value Oracle" description="This Oracle gives you a random value as a float between 0 and 1, same as Math.random() but for jigs." widgetname="oracle1" oracleOrigin={RandomValueRequest_origin}/>
-          <OracleCard title="BSV/USD Price Oracle" description="This Oracle gives you the current BSV price in USD" price={0.01} widgetname="oracle2" oracleOrigin={BSVUSDRequest_origin}/>
-          <OracleCard title="Timestamp Oracle" description="This Oracle gives you the current timestamp in ms, same as Date.now() but for jigs." price={0.01} widgetname="oracle3" oracleOrigin={TimestampRequest_origin}/>     
+          <OracleCard title="Random Value Oracle" description="This Oracle gives you a random value as a float between 0 and 1, same as Math.random() but for jigs." widgetname="oracle1" oracleOrigin={Oracle_RandomValue_origin}/>
+          <OracleCard title="BSV/USD Price Oracle" description="This Oracle gives you the current BSV price in USD" price={0.01} widgetname="oracle2" oracleOrigin={Oracle_Timestamp_origin}/>
+          <OracleCard title="Timestamp Oracle" description="This Oracle gives you the current timestamp in ms, same as Date.now() but for jigs." price={0.01} widgetname="oracle3" oracleOrigin={Oracle_Timestamp_origin}/>    
+          <OracleCard title="BSV/EUR Oracle" description="This Oracle gives you you the current BSV price in USD" price={0.01} widgetname="oracle4" oracleOrigin={Oracle_BSVEUR_origin}/>   
         </Grid>
       </header>
     </div>
