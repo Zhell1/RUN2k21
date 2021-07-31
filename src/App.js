@@ -26,7 +26,7 @@ function App() {
         network: 'main',
         purse: myPurse,
         trust:"*",
-        app: "RUN2K2021_Hackaton_RunCraft",
+        app: "runcraft.io",  # previously: "RUN2K2021_Hackaton_RunCraft"
     })
   run.activate()
   window.run = run // make accessible in console
