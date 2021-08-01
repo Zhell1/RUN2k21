@@ -13,7 +13,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { SnackbarProvider } from 'notistack';
 //import Run from "run-sdk";
 
-import { get_bsvusd } from "./getBsvPrice.js"
+import { get_latest_BSVUSD_price } from "./getBsvPrice.js"
 import { waitAndCheckValue, TIMEOUT_MS } from "./checkOracleValue.js"
 import { CopiedMessage } from "./copiedMessage.js"
 
@@ -165,7 +165,7 @@ export function OracleCard(props) {
       console.log("my_oracle 1 = ",my_oracle)
       await my_oracle.sync()
       //
-      let bsvusd = await get_bsvusd()
+      let bsvusd = await get_latest_BSVUSD_price()
       let topay_satoshis = parseInt(my_oracle.get_price_USD() / bsvusd * 1e8, 10)
       //
       await run.sync() // sync purse
