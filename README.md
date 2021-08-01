@@ -6,6 +6,25 @@ ___________________
 
 <img src="./image.jpg">
 
+# Quickstart
+
+```js
+var Oracle_RandomValue = await run.load(Oracle_RandomValue_origin)
+await Oracle_RandomValue.sync() // sync oracle for latest .get_price_USD()
+
+let bsvusd = await get_bsvusd()
+let pay_satoshis = parseInt(Oracle_RandomValue.get_price_USD() / bsvusd * 1e8, 10)
+let myRandomValue = new Oracle_RandomValue(pay_satoshis)
+await run.sync()
+
+setTimeout(async ()=>{
+    await myRandomValue.sync()
+    console.log("oracle answered : ",myRandomValue.value)
+}, 8000)
+```
+
+_________________
+
 # What's the deal
 
 This repo is mostly a React front-end that displays how a website can use jigs to get values from the functional RUN oracles we deployed. We also provide a nodejs example. This repo is deployed on github-pages at **[zhell1.github.io/RUN2k21](https://zhell1.github.io/RUN2k21/)** 
@@ -83,29 +102,6 @@ When the oracle price is updated, if you create an oracleRequest at the same tim
 
 **So always make sure to sync() the oracle to use the latest price and it will work flawlessly - combined with our tolerance window!**
 
-_________________
-
-# Basic Example
-
-```js
-var RandomValueRequest = await load_contract(RandomValueLocation)
-// sync for safety
-await RandomValueRequest.sync()
-
-// sync oracle for latest .get_price_USD()
-let my_oracle = RandomValueRequest
-await my_oracle.sync()
-
-let bsvusd = await get_bsvusd()
-let topay_satoshis = parseInt(my_oracle.get_price_USD() / bsvusd * 1e8, 10)
-
-let myRandomValue = new RandomValueRequest(topay_satoshis)
-await run.sync()
-setTimeout(async ()=>{
-    await myRandomValue.sync()
-    console.log("oracle answered : ",myRandomValue.value)
-}, 8000)
-```
 
 _________________
 
